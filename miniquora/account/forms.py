@@ -30,7 +30,7 @@ class SignupForm(forms.ModelForm):
         data_password1 = self.cleaned_data['password1']
         data_password2 = self.cleaned_data['password2']
         if data_password1 and data_password2 and data_password1 != data_password2:
-            return forms.ValidationError("Passwords don't match")
+            raise forms.ValidationError("Passwords don't match")
         return data_password2
     def save(self, commit = True):
         user = super(SignupForm, self).save(commit = False)
@@ -43,5 +43,20 @@ class SignupForm(forms.ModelForm):
         model = CustomUser
         fields = ['username', 'email', 'phone_number']
 
+class ForgotPasswordForm(forms.Form):
+    email = forms.EmailField(max_length = 254)
+    def clean_email(self):
+        data_email = self.cleaned_data.get('email')
+        if data_email and CustomUser.objects.filter(email = data_email).count() == 0:
+            raise forms.ValidationError("We cannot find user with this email address. Please verify email address and try again");
+        return data_email
 
-
+class SetPasswordForm(forms.Form):
+    password1 = forms.CharField(label='Password', widget = forms.PasswordInput)
+    password2 = forms.CharField(label='Confirm Password', widget = forms.PasswordInput, help_text = 'Should be same as Password')
+    def clean_password2(self):
+        data_password1 = self.cleaned_data['password1']
+        data_password2 = self.cleaned_data['password2']
+        if data_password1 and data_password2 and data_password1 != data_password2:
+            raise forms.ValidationError("Passwords don't match")
+        return data_password2
