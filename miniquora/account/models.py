@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 
-GENDER_CHOICES = (('M', 'Male'), ('F', 'Female'), ('NS', 'Not Set'))
+GENDER_CHOICES = (('M', 'Male'), ('F', 'Female'), ('NS', '--'))
 class CustomUser(AbstractUser):
     gender = models.CharField(max_length = 2, choices = GENDER_CHOICES, default = GENDER_CHOICES[2][0])
     profile_pic = models.ImageField(upload_to = 'profile_pics/', blank = True)

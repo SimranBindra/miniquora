@@ -12,7 +12,7 @@ from django.conf import settings
 from django.template import loader
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from .forms import LoginForm, SignupForm, ForgotPasswordForm, SetPasswordForm
+from .forms import LoginForm, SignupForm, ForgotPasswordForm, SetPasswordForm, ProfileForm
 from .models import CustomUser
 
 # Create your views here.
@@ -132,3 +132,18 @@ def reset_password(request, uid = None, token=None):
             return redirect('base')
     context = { 'validlink' : True, 'form' : f}
     return render(request, 'authentication/set_password.html', context)
+
+@login_required
+@require_http_methods(['GET', 'POST'])
+def edit_profile(request):
+    context = {}
+    if request.method == 'GET':
+        f = ProfileForm(instance = request.user)
+    else:
+        print(request.POST)
+        f = ProfileForm(request.POST, request.FILES,instance = request.user)
+        if f.is_valid():
+            f.save()
+            context['save_success'] = True
+    context['form'] = f
+    return render(request, 'authentication/profile.html', context)

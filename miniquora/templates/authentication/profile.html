@@ -1,0 +1,24 @@
+{% extends 'base/base.html' %}
+{% load material_form %}
+{% block pagetitle %} MiniQuora | My Profile {% endblock %}
+{% block content %} 
+<div class="row">
+    <div class="col s12">
+        <div class="card-panel">
+            <h4>My Profile</h4>
+            {% if save_success %}
+            <h6> Profile Update </h6>
+            {% endif %}
+            <form action = "{% url 'myprofile' %}" method = 'post' enctype="multipart/form-data">
+                {% csrf_token %}
+                {% form form=form %}{% endform %}
+                <div class="row">
+                    <div class="col s12">
+                        <button type="submit" name="save" class="btn waves-effect waves-light left">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
