@@ -1,17 +1,18 @@
 {% extends 'base/base.html' %}
 {% load material_form %}
+{% load staticfiles %}
 {% block pagetitle %} MiniQuora | Login {% endblock %}
 {% block content %} 
 <div class="row">
     <div class="col s12 m8 l6 offset-m2 offset-l3">
         <div class="card-panel">
             <h4>Login</h4>
-            <form action = "{% url 'base' %}" method = 'post'>
+            <form action = "{% url 'base' %}" method = 'post' id="login-form">
                 {% csrf_token %}
                 {% form form=form %}{% endform %}
                 <div class="row">
                     <div class="col s12">
-                        <button type="submit" name="login" class="btn waves-effect waves-light left">Log In</button>
+                        <button type="submit" id ="login-btn" name="login" class="btn waves-effect waves-light left">Log In</button>
                     </div>
                 </div>
                 <div class="row">
@@ -28,4 +29,12 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'authentication/js/login.js' %}" type="text/javascript"></script>
+<script>
+    $(document).ready(function() {
+        Login.init();
+    });
+</script>
 {% endblock %}

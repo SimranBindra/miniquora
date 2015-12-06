@@ -28,7 +28,10 @@ def base(request):
         if f.is_valid():
             user = f.get_user();
             auth_login(request, user)
-            return redirect('home')
+            return JsonResponse(data = {'success': True });
+        else:
+            data = { 'error' : True, 'errors' : dict(f.errors.items())};
+            return JsonResponse(status = 400, data = data);
     return render(request, 'authentication/login.html', { 'form': f})
 
 @require_http_methods(['GET', 'POST'])
