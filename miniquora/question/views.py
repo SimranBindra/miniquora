@@ -45,9 +45,15 @@ def search(request):
     data['questions'] = [{'id' : q.id, 'title' : q.title} for q in questions]
     return JsonResponse(data)
 
-
-
-
-
-            
-
+@login_required
+@require_POST
+def addanswer(request, q_id = None):
+    ques = get_object_or_404(Question, id = q_id);
+    answer_text = request.POST.get('answer').strip()
+    if answer_text:
+        answer = Answer.objects.create(
+            question = ques, 
+            by = request.user,
+            text = answer_text
+        );
+    return JsonResponse({'success': 1, 'answer' : { 'id' : answer.id, 'text' : answer.text } });

@@ -14,12 +14,29 @@
 <ul class="collection with-header">
     <li class="collection-header">Type something on the top!!!</li>
 </ul>
+<ul class="collection">
+    {% for q in ques %}
+    <li class="collection-item avatar" style="height: 150px;">
+        <img src="{{ q.by.profile_pic.url}}" alt="" class="circle">
+        <span class="title">{{ q.title }}</span><span> {{ q.answers.count }} Answers </span>
+        <p>{{ q.desc }}</p>
+        <div class="recent-answer">{{ q.answers.first.text }}</div>
+        <form action="{% url 'addanswer' q.id %}" method = "POST">
+            {% csrf_token %}
+            <input type="text" name="answer">
+            <input type="submit" class="addanswer-btn" value="Add Answer">
+        </form>
+    </li>
+{% endfor %}
+</ul>
 {% endblock %}
 {% block scripts %}
 <script src="{% static 'question/js/qsearch.js' %}" type="text/javascript"></script>
+<script src="{% static 'question/js/answer.js' %}" type="text/javascript"></script>
 <script>
     $(document).ready(function() {
         QSearch.init('search');
+        QAnswer.init();
     });
 </script>
 {% endblock %}

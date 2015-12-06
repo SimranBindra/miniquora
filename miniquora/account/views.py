@@ -14,6 +14,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .forms import LoginForm, SignupForm, ForgotPasswordForm, SetPasswordForm, ProfileForm
 from .models import CustomUser
+from question.models import Question
 
 # Create your views here.
 @require_http_methods(['GET', 'POST'])
@@ -61,7 +62,9 @@ def logout(request):
 @require_GET
 @login_required
 def home(request):
-    return render(request, 'base/loggedin.html');
+    recent_ten_ques = Question.objects.all().order_by('-created_at')[:10];
+    context = { 'ques' : recent_ten_ques };
+    return render(request, 'base/loggedin.html', context);
 
 
 @require_GET

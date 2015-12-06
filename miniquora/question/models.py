@@ -29,6 +29,8 @@ class Answer(models.Model):
     downvoted_by = models.ManyToManyField(CustomUser, related_name = 'answers_downvoted', blank = True)
     def __str__(self):
         return self.text[:20];
+    class Meta:
+        ordering = ['-created_at']
 
 
 
